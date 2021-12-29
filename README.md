@@ -8,7 +8,7 @@ The subdirectory can be changed to another path by editing js/settings.js (defau
    
 - UI Themed, and added some more informations (RunningTime, MediumSpeed, TranferRate, ErrorCount, ...)
     
-![rclone-rc-web-gui](/snapshot.png?raw=true)
+![rclone-rc-web-gui](/screenshot.png?raw=true)
 
 # rclone rc with reverse proxy
 Exemple: to use RClone RC GUI 2 webui behind a reverse proxy with /rclone subdir :
