@@ -7,4 +7,4 @@
 
 - UI Themed, and added some more informations (RunningTime, MediumSpeed, TranferRate, ...)
     
-![rclone-rc-web-gui](/screenshot.png?raw=true)
+![rclone-rc-web-gui](/snapshot.png?raw=true)
