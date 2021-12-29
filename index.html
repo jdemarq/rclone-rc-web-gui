@@ -3,22 +3,28 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>rclone rc GUI</title>
-
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
-
-    <link rel="stylesheet" href="/css/gui.css" />
-    <link rel="stylesheet" href="/css/gui-mobile.css" />
+    <title>rclone rc</title>
+    <link rel="stylesheet" href="/rclone/css/gui.css" />
+    <link rel="stylesheet" href="/rclone/css/gui-mobile.css" />
 </head>
 <body>
     <div class="body-block header">
-        <h1>rclone rc GUI</h1>
-    </div>
-
+	<table>
+	<tr>
+        <td><div><a href="."><img align="left" src="images/logo.svg" alt="rclone rc gui" width="150px"></a></div></td>
+        <td Style="align:left;">
+        <table Style="align:left">
+        <tr><td>UpTime: <span id="statsElapsedTime"></span></td><td>Medium Speed: <span id="statsSpeed"></span></td></tr>
+        <tr><td>Transfer Time: <span id="statsTransferTime"></span></td><td>Total transf.: <span id="statsBytes"></span></td></tr>
+        <tr><td>Errors: <span id="statsErrors"></span></td><td>Deletes: <span id="statsDeletes"></span></td></tr>
+        </table>
+        </td>
+	</tr>
+        </table>
+        </div>
     <div class="body-block">
-        <h2>Transfers (<span id="currentTransfersCount">0</span>)</h2>
-        <div id="currentTransfers">
+	<h3>⬇️ Transfers [<span id="currentTransfersCount">0</span>]</h3>        
+	<div id="currentTransfers">
             <table>
                 <thead>
                     <th>#</th>
@@ -41,24 +47,20 @@
             </table>
         </div>
     </div>
-
     <div class="body-block">
-        <h2>Files</h2>
-        <div id="files">
+        <h3>📁 Files</h3>
+	<div id="files">
             <div class="filesPanelWrapper">
-                <div class="controls">
-                    <button type="button" onclick="copyClicked(this, 'leftPanelFiles');">Copy</button>
-                    <button type="button" onclick="moveClicked(this, 'leftPanelFiles');">Move</button>
-                    <button type="button" onclick="deleteClicked(this, 'leftPanelFiles');">Delete</button>
-                    <div class="lastButtons">
-                        <button type="button" onclick="showCreateFolder(this);">
-                            Create&nbsp;folder</button>
-                        <button type="button" onclick="refreshClicked('leftPanelFiles');">
-                            Refresh
-                        </button>
-                    </div>
-                </div>
-                <div class="create-folder">
+            <div class="controls">
+            <button type="button" onclick="copyClicked(this, 'leftPanelFiles');">©️Copy</button>
+            <button type="button" onclick="moveClicked(this, 'leftPanelFiles');">➡️Move</button>
+            <button type="button" onclick="deleteClicked(this, 'leftPanelFiles');">🗑️ Delete</button>
+            <div class="lastButtons">
+            <button type="button" onclick="showCreateFolder(this);">📂Create&nbsp;folder</button>
+            <button type="button" onclick="refreshClicked('leftPanelFiles');">🔄Refresh</button>
+         </div>
+      </div>                
+   <div class="create-folder">
                     <input type="text" placeholder="Folder name" />
                     <button type="button" onclick="createFolderClicked(this, 'leftPanelFiles');">Create</button>
                     <button type="button" onclick="hideCreateFolder(this);">Cancel</button>
@@ -73,7 +75,7 @@
                     <div class="panelFilesContainer">
                         <div id="leftPanelFiles" class="filesList">
                             <div class="fileLine">
-                                <img class='icon' src="/images/file.svg" />
+                                <img class='icon' src="images/file.svg" />
                                 <p>..</p>
                             </div>
                         </div>
@@ -81,67 +83,67 @@
                 </div>
             </div>
             <div class="filesPanelWrapper">
-                <div class="controls">
-                    <button type="button" onclick="copyClicked(this, 'rightPanelFiles');">Copy</button>
-                    <button type="button" onclick="moveClicked(this, 'rightPanelFiles');">Move</button>
-                    <button type="button" onclick="deleteClicked(this, 'rightPanelFiles');">Delete</button>
+	            <div class="controls">
+                    <button type="button" onclick="copyClicked(this, 'rightPanelFiles');">©️Copy</button>
+                    <button type="button" onclick="moveClicked(this, 'rightPanelFiles');">⬅️Move</button>
+                    <button type="button" onclick="deleteClicked(this, 'rightPanelFiles');">🗑️ Delete</button>
                     <div class="lastButtons">
-                        <button type="button" onclick="showCreateFolder(this);">
-                            Create&nbsp;folder</button>
-                        <button type="button" onclick="refreshClicked('rightPanelFiles');">
-                            Refresh
-                        </button>
+                    <button type="button" onclick="showCreateFolder(this);">📂Create&nbsp;folder</button>
+                    <button type="button" onclick="refreshClicked('rightPanelFiles');">🔄Refresh</button>
                     </div>
-                </div>
-                <div class="create-folder">
+                    </div>
+                    <div class="create-folder">
                     <input type="text" placeholder="Folder name" />
-                    <button type="button" onclick="createFolderClicked(this, 'rightPanelFiles');">Create</button>
-                    <button type="button" onclick="hideCreateFolder(this);">Cancel</button>
-                </div>
-                <div class="filesPanel">
+                    <button type="button" onclick="createFolderClicked(this, 'rightPanelFiles');">📂Create</button>
+                    <button type="button" onclick="hideCreateFolder(this);">❌Cancel</button>
+                    </div>
+                    <div class="filesPanel">
                     <div class="filesPanelHeader">
-                        <select id="rightPanelRemote" onchange="remoteChanged(this, 'rightPanelFiles');">
-                            <option value="">- choose a remote -</option>
-                        </select>
-                        <div>Items:&nbsp;<span class="filesCount">-</span></div>
+                    <select id="rightPanelRemote" onchange="remoteChanged(this, 'rightPanelFiles');">
+                    <option value="">- choose a remote -</option>
+                    </select>
+                    <div>Items:&nbsp;<span class="filesCount">-</span></div>
                     </div>
                     <div class="panelFilesContainer">
-                        <div id="rightPanelFiles" class="filesList">
-                            <div class="fileLine">
-                                <img class='icon' src="/images/file.svg" />
-                                <p>..</p>
-                            </div>
-                        </div>
+                    <div id="rightPanelFiles" class="filesList">
+                    <div class="fileLine">
+           	    <img class='icon' src="images/file.svg" />
+                    <p>..</p>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
                     </div>
                 </div>
-            </div>
+                <hr>
         </div>
-    </div>
-
-    <div class="body-block" style="flex-grow:1; padding-bottom:30px;">
-        <h2>Completed transfers (<span id="completedTransfersCount">0</span>)</h2>
-        <div id="completedTransfers">
-            <table>
-                <thead>
-                    <th>Started at</th>
-                    <th>Status</th>
-                    <th>Name</th>
-                    <th>Size</th>
-                </thead>
-                <tbody id="completedTransfersBody">
-                    <tr>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="body-block" style="flex-grow:1; padding-bottom:5px;">
+                <h3>✅ Complete [<span id="completedTransfersCount">0</span>]</h3>
+                <div id="completedTransfers">
+                        <table>
+                                <thead>
+                                        <th>Started at</th>
+                                        <th>RunningTime</th>
+                                        <th>Status</th>
+                                        <th>Name</th>
+                                        <th>Size</th>
+                                </thead>
+                                <tbody id="completedTransfersBody">
+                                        <tr>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                        </tr>
+                                </tbody>
+                        </table>
+                </div>
+                <hr>
         </div>
-    </div>
-
-    <div class="body-block footer">
-        <div>
+        <div class="body-block footer">
+	<div>
             <b>rclone</b> <span id="rcloneVersion"><i>unknown</i></span>
             <b>on</b> <span id="rcloneOS"><i>unknown</i></span></li>
         </div>
@@ -150,8 +152,8 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="/js/settings.js"></script>
-    <script type="text/javascript" src="/js/functions.js"></script>
-    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="js/settings.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
