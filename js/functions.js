@@ -15,6 +15,7 @@ function getIconType(mimeType)
         case "video/x-matroska":
         case "video/mp4":
         case "video/webm":
+	case "video/x-msvideo":
             return "film.svg";
         case "audio/aac":
         case "audio/mpeg":
