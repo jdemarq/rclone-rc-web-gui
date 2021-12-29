@@ -1,6 +1,6 @@
 html {
     box-sizing: border-box;
-    background: #e5e5e5;
+    background: #607D8B;
 }
 *,
 *:before,
@@ -13,14 +13,14 @@ body {
     max-width: 1280px;
     min-height: 100vh;
     margin: 0 auto;
-    font-family: Verdana,Geneva,Tahoma,sans-serif;
-    font-size: 16px;
-    color: #000;
-    background-color: #fff;
+    font-family: Verdana, DejaVu Sans, Bitstream Vera Sans, Geneva, sans-serif;
+    font-size: 11px;
+    color: #fff;
+    background-color: #384557;
     box-shadow: 0 0 15px -5px #000;
 }
 
-h1 { font-size: 2em; }
+h1 { font-size: 1.8em; }
 h2 { font-size: 1.5em; }
 h3 { font-size: 1.3em; }
 h4 { font-size: 1em; }
@@ -28,7 +28,7 @@ h5 { font-size: 0.8em; }
 h6 { font-size: 0.7em; }
 
 .body-block {
-    padding: 15px 20px;
+    padding: 2px 4px;
 }
 .body-block > :first-child {
     margin-top: 0;
@@ -37,10 +37,13 @@ h6 { font-size: 0.7em; }
     margin-bottom: 0;
 }
 .header, .footer {
-    background: #ebebeb;
+    background: #006e91;
+    font-family: Monaco, DejaVu Sans Mono, Lucida Console, Andale Mono, monospace;
 }
 .header {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    font-size: 11px;
+    text-align: right;
 }
 .footer {
     display: flex;
@@ -48,7 +51,8 @@ h6 { font-size: 0.7em; }
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #333;
+    font-family: Monaco, DejaVu Sans Mono, Lucida Console, Andale Mono, monospace;
+    color: #fff;
 }
 h1, h2 {
     margin-bottom: 0;
@@ -59,12 +63,15 @@ table {
     border-spacing: 0px;
     border-collapse: collapse;
     overflow-x: auto;
+    border: 0px solid black;
+    align: center;
 }
 table th,
 table td {
-    padding: 4px 8px;
+    padding: 2px 2px;
     text-align: left;
 }
+
 td > progress {
     width: 100%;
 }
@@ -91,12 +98,13 @@ td > progress {
 .canBeLong,
 #currentTransfers > table td.canBeLong {
     white-space: pre-line;
+    text-align: left;
 }
 #completedTransfers > table td:nth-child(2) {
     text-align: center;
 }
 #completedTransfersBody {
-    color: #555;
+    color: #fff;
 }
 
 #currentTransfers {
@@ -147,6 +155,7 @@ pre {
     border: 1px solid #ccc;
     flex: 1 0;
     overflow-y: auto;
+    background: #636363;
 }
 .filesPanel > select {
     padding: 3px;
@@ -158,6 +167,7 @@ pre {
 .filesList {
     display: flex;
     flex-direction: column;
+    background: #636363;
 }
 .filesList > * {
     margin: 2px 0;
@@ -176,7 +186,8 @@ pre {
     flex: 1 0;
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 4px;
+    background: #6d6d6d;
 }
 .fileLine > img.icon {
     flex-shrink: 0;
@@ -185,19 +196,20 @@ pre {
     margin: 0 0 0 10px;
 }
 .folderLine:hover {
-    background: #ebebeb;
+    background: #bababa;
     cursor: pointer;
 }
 
 .filesPanelHeader {
     display: flex;
     justify-content: space-between;
+    background: #636363;
 }
 .filesPanelHeader > div {
     padding-top: 2px;
     padding-right: 6px;
     font-size: 80%;
-    color: #555;
+    color: #fff;
 }
 .filesCount {
     font-weight: bold;
@@ -239,4 +251,20 @@ pre {
 
 #currentTransfersBody img {
     cursor: pointer;
+}
+
+button {
+        float: left;
+        margin: 0px;
+        padding: 1px;
+        cursor: pointer;
+        display: inline-block;
+        outline: none;
+        position: relative;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        transition: all 0.3s;
+        color: #fff;
+        border-width: 0px;
+        background: #384557;
 }
