@@ -13,7 +13,8 @@ The subdirectory can be changed to another path by editing js/settings.js (defau
 # rclone rc with reverse proxy
 Exemple: to use RClone RC GUI 2 webui behind a reverse proxy with /rclone subdir :
     
-- edit js/settings.js :  
+- edit js/settings.js :
+
         var rcloneHost = "https://your.publicadresswebsite.com";
         var rclonePort = "443";
         var rcloneUser = "YOUR-USERNAME";
@@ -21,11 +22,13 @@ Exemple: to use RClone RC GUI 2 webui behind a reverse proxy with /rclone subdir
         var rcloneDir = "/rclone";
 
 - Setup your reverse proxy (nginx example) :
+   
 location /rclone/ {
                     proxy_pass http://192.168.1.111:5572/;
 }
     
 - start rclone with :
+   
 /usr/bin/rclone rcd --rc-web-gui --rc-web-gui-no-open-browser --rc-user=YOUR-USERNAME --rc-pass=YOUR-PASSWORD --config=/config/rclone.conf --rc-addr=:5572 --rc-serve --rc-allow-origin https://your.publicadresswebsite.com --rc-baseurl rclone --transfers 1 /config/web-ui/
     
     
