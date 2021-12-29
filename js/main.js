@@ -5,8 +5,8 @@ var panelsPaths = {
 
 transfersQueue = []
 
-var spanOK = "<span style='color:green;'>OK</span>";
-var spanFAIL = "<span style='color:red;'>error</span>";
+var spanOK = "<span>✅</span>";
+var spanFAIL = "<span>❌</span>";
 
 initialize();
 
@@ -35,13 +35,11 @@ window.setInterval(function () { processQueue(); }, timerProcessQueue);
 
 function sendRequestToRclone(query, params, fn)
 {
-    let url = rcloneHost.concat(":", rclonePort, query);
+    let url = rcloneHost.concat(":", rclonePort, rcloneDir  , query);
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url);
     xhr.setRequestHeader("Authorization", "Basic " + btoa(rcloneUser.concat(":", rclonePass)));
 
-    // console.group("Command:", query);
-    // console.debug("URL:", url);
     if (params === "") { xhr.send(); }
     else
     {
@@ -49,11 +47,9 @@ function sendRequestToRclone(query, params, fn)
         {
             params["_async"] = true;
         }
-        // console.debug("Parameters: ", params);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(JSON.stringify(params));
     }
-    // console.groupEnd();
 
     xhr.onload = function()
     {
@@ -124,7 +120,6 @@ function remoteChanged(remotesList, filesPanelID)
     let remote = remotesList.value;
     if (remote === "") { return; }
 
-    //console.debug(remotes[remote]);
     openPath(
         remote.concat(
             ":/",
@@ -136,8 +131,6 @@ function remoteChanged(remotesList, filesPanelID)
 
 function openPath(path, filesPanelID)
 {
-    //console.debug(path);
-
     if (path.trim() === "") { return; }
 
     let filesPanel = document.getElementById(filesPanelID);
@@ -145,26 +138,17 @@ function openPath(path, filesPanelID)
 
     filesPanel.parentNode.parentNode.getElementsByClassName("filesCount")[0].textContent = "-";
 
-    //let firstSlash = path.indexOf("/") + 1;
     let lastSlash = path.lastIndexOf("/") + 1;
     let basePath = lastSlash !== 0 ? path.substring(0, lastSlash) : path.concat("/");
     //let currentPath = path.substring(firstSlash, path.length);
     let nextPath = lastSlash !== 0 ? path.substring(lastSlash, path.length) : "";
-
-    //console.group("Paths");
-    // console.debug("Last slash", lastSlash);
-    //console.debug("Path:", path);
-    //console.debug("Base path:", basePath);
-    //console.debug("Current path:", currentPath);
-    //console.debug("Next path:", nextPath);
-    //console.groupEnd();
 
     panelsPaths[filesPanelID] = path;
 
     let div = ""
         .concat(`<div class='fileLine folderLine'
             onclick="openPath('${basePath.substring(0, lastSlash - 1).replace(/'/g, "\\'")}', '${filesPanelID}');">`)
-        .concat("<img class='icon' src='/images/file.svg' />")
+        .concat("<img class='icon' src='", rcloneDir, "/images/file.svg' />")
         .concat("<p>..</p>")
         .concat("</div>");
     filesPanel.appendChild(htmlToElement(div));
@@ -185,7 +169,6 @@ function openPath(path, filesPanelID)
 
         listOfFilesAndFolders = rez["list"];
         listOfFilesAndFolders.sort(sortFilesAndFolders);
-        //console.table(listOfFilesAndFolders);
         filesPanel.parentNode.parentNode.getElementsByClassName("filesCount")[0].textContent = listOfFilesAndFolders.length;
         for (let r in listOfFilesAndFolders)
         {
@@ -206,7 +189,7 @@ function openPath(path, filesPanelID)
             {
                 div = div.concat(`<div class='fileLine' data-type='file' data-path="${fileNamePath}">`)
             }
-            div = div.concat("<img class='icon' src='/images/", getIconType(listOfFilesAndFolders[r]["MimeType"]), "' />")
+            div = div.concat("<img class='icon' src='", rcloneDir , "/images/", getIconType(listOfFilesAndFolders[r]["MimeType"]), "' />")
                 .concat("<p>", fileName, "</p>")
                 .concat("</div></div>");
             filesPanel.appendChild(htmlToElement(div));
@@ -214,9 +197,30 @@ function openPath(path, filesPanelID)
     });
 }
 
+// Time Format Functions
+const sec2time = (SEC) => {
+    return (new Date( SEC * 1000).toISOString().substr(11,8));
+}
+const msec2time = (MSEC) => {
+    return (new Date(MSEC).toISOString().substr(11,8));
+}
+function secondsToDhms(seconds) {
+        seconds = Number(seconds);
+        var d = Math.floor(seconds / (3600*24));
+        var h = Math.floor(seconds % (3600*24) / 3600);
+        var m = Math.floor(seconds % 3600 / 60);
+        var s = Math.floor(seconds % 60);
+
+        var dDisplay = d > 0 ? d + (d == 1 ? "J " : "J ") : "";
+        var hDisplay = h > 0 ? h + (h == 1 ? "H " : "H ") : "";
+        var mDisplay = m > 0 ? m + (m == 1 ? "M " : "M ") : "";
+        var sDisplay = s > 0 ? s + (s == 1 ? "s" : "s") : "";
+        return dDisplay + hDisplay + mDisplay + sDisplay;
+}
+
+
 function updateCurrentTransfers(currentTransfers)
 {
-    //console.table(currentTransfers);
     let currentTransfersBody = document.getElementById("currentTransfersBody");
     while (currentTransfersBody.firstChild)
     {
@@ -249,7 +253,7 @@ function updateCurrentTransfers(currentTransfers)
                 <td>${getHumanReadableValue(currentTransfers[t]["size"], "")}</td>
                 <td>${getHumanReadableValue(parseFloat(currentTransfers[t]["speed"]).toFixed(), "/s")}</td>
                 <td><progress value="${currentTransfers[t]["percentage"]}" max="100"></progress></td>
-                <td><img src="/images/x-square.svg" onclick="cancelTransfer(this, '${currentTransfers[t]["group"]}');" /></td>
+                <td><img src="${rcloneDir}/images/x-square.svg" onclick="cancelTransfer(this, '${currentTransfers[t]["group"]}');" /></td>
                 </tr>`;
             currentTransfersBody.appendChild(htmlToElement(tr));
         }
@@ -260,7 +264,7 @@ function updateCurrentTransfers(currentTransfers)
         let tr = `<tr style="font-style:italic;">
             <td><code>${transfersQueue[q].operationType}</code></td>
             <td colspan="4" class="canBeLong">${transfersQueue[q].dataPath}</td>
-            <td><img src="/images/x-square.svg" onclick="removeFromQueue(this, ${q});" /></td>
+            <td><img src="${rcloneDir}/images/x-square.svg" onclick="removeFromQueue(this, ${q});" /></td>
             </tr>`;
         currentTransfersBody.appendChild(htmlToElement(tr));
     }
@@ -277,8 +281,6 @@ function updateCompletedTransfers(completedTransfers)
 
     if (completedTransfers === undefined || !completedTransfers.length)
     {
-        // let tr = "<tr><td>-</td><td>-</td><td>-</td></tr>";
-        // completedTransfersBody.appendChild(htmlToElement(tr));
         document.getElementById("completedTransfers").style.display = "none";
         document.getElementById("completedTransfersCount").textContent = "0";
         return;
@@ -296,8 +298,9 @@ function updateCompletedTransfers(completedTransfers)
 
         let tr = `<tr>
             <td>${new Date(completedTransfers[t]["started_at"]).toLocaleString("en-GB")}</td>
-            <td>${completedTransfers[t]["error"] === "" ? spanOK : spanFAIL}</td>
-            <td class="canBeLong">${completedTransfers[t]["name"]}</td>
+            <td title="Start:${new Date(completedTransfers[t]["started_at"]).toLocaleString("en-GB")}\r\nEnd: ${new Date(completedTransfers[t]["completed_at"]).toLocaleString("en-GB")}">${ msec2time((new Date(completedTransfers[t]["completed_at"])) - (new Date(completedTransfers[t]["started_at"])))}</td>
+            <td title="${completedTransfers[t]["error"]}" >${completedTransfers[t]["error"] === "" ? spanOK : spanFAIL}</td>
+            <td class="canBeLong" title="${completedTransfers[t]["name"]}">${completedTransfers[t]["name"]}</td>
             <td>${getHumanReadableValue(completedTransfers[t]["size"], "")}</td>
             </tr>`;
         completedTransfersBody.appendChild(htmlToElement(tr));
@@ -318,14 +321,19 @@ function getCurrentTransfers()
     sendRequestToRclone("/core/stats", "", function(rez)
     {
         updateCurrentTransfers(rez["transferring"]);
-    });
+        document.getElementById("statsElapsedTime").textContent = ( secondsToDhms(rez["elapsedTime"]));
+        document.getElementById("statsTransferTime").textContent = ( secondsToDhms(rez["transferTime"]));
+        document.getElementById("statsErrors").textContent = rez["errors"];
+        document.getElementById("statsBytes").textContent = ( rez["bytes"] / 1000000000).toFixed(2) + " GB";
+        document.getElementById("statsDeletes").textContent = rez["deletes"];
+        document.getElementById("statsSpeed").textContent = (rez["speed"] / 1000000 ).toFixed(2) + " MB/s";
+});
 }
 
 function getCompletedTransfers()
 {
     sendRequestToRclone("/core/transferred", "", function(rez)
     {
-        //console.table(rez["transferred"]);
         updateCompletedTransfers(rez["transferred"]);
     });
 }
@@ -347,7 +355,6 @@ function cancelTransfer(cancelBtn, groupID)
     let params = { "jobid": jobID };
     sendRequestToRclone("/job/stop", params, function(rez)
     {
-        //console.debug(rez);
         refreshView();
     });
 }
@@ -402,17 +409,12 @@ function addToQueue(operationType, filesPanelID)
 {
     let checkedBoxes = document.getElementById(filesPanelID)
         .querySelectorAll("input[name=fileListItem]:checked");
-    //console.debug(checkedBoxes, checkedBoxes.length);
     for (let i = 0; i < checkedBoxes.length; i++)
     {
-        //console.debug("doing file operation");
-        //console.debug(checkedBoxes[i].parentNode.parentNode.getElementsByClassName("fileLine")[0].dataset.path);
-
         let dataPath = checkedBoxes[i].nextElementSibling.dataset.path;
         let lastSlash = dataPath.lastIndexOf("/") + 1;
         let sourcePath = dataPath.substring(0, lastSlash);
         let targetPath = dataPath.substring(lastSlash, dataPath.length);
-
         let dataType = checkedBoxes[i].nextElementSibling.dataset.type;
 
         transfersQueue.push(
@@ -435,11 +437,6 @@ function addToQueue(operationType, filesPanelID)
 
 function processQueue()
 {
-    // console.debug(
-    //     document.getElementById("currentTransfersCount").textContent,
-    //     transfersQueue.length
-    // );
-    //console.table(transfersQueue);
     if ( // the queue is empty or of there already are active transfers
         document.getElementById("currentTransfersCount").textContent !== "0"
         || !transfersQueue.length
@@ -496,15 +493,6 @@ function copyOrMoveOperation(operationType, dataType, dataPath, sourcePath, targ
         }
         sendRequestToRclone(folderOperation, params, function(rez)
         {
-            //console.debug("Folder operation result:", rez);
-            // if (operationType === "move")
-            // {
-            //     refreshFilesListing();
-            // }
-            // else
-            // {
-            //     openPath(panelsPaths[panelToUpdate], panelToUpdate);
-            // }
         });
     }
     else
@@ -522,15 +510,6 @@ function copyOrMoveOperation(operationType, dataType, dataPath, sourcePath, targ
         }
         sendRequestToRclone(fileOperation, params, function(rez)
         {
-            //console.debug("File operation result:", rez);
-            // if (operationType === "move")
-            // {
-            //     refreshFilesListing();
-            // }
-            // else
-            // {
-            //     openPath(panelsPaths[panelToUpdate], panelToUpdate);
-            // }
         });
     }
 }
@@ -549,11 +528,8 @@ function deleteOperation(operationType, dataType, sourcePath, targetPath, filesP
     {
         console.error(`Unknown operation type: ${operationType}`);
     }
-    // console.debug("Delete:", folderOperation, params);
     sendRequestToRclone(folderOperation, params, function(rez)
     {
-        //console.debug("Delete result:", rez);
-        //openPath(panelsPaths[filesPanelID], filesPanelID);
     });
 }
 
