@@ -1,9 +1,10 @@
-var guiVersion = "0.1.2";
+var guiVersion = "fork v0.1";
 
 var rcloneHost = "http://127.0.0.1";
 var rclonePort = "5572";
 var rcloneUser = "YOUR-USERNAME";
 var rclonePass = "YOUR-PASSWORD";
+var rcloneDir = "/rclone"; // for --rc-baseurl
 
 var asyncOperations = [
     "/sync/copy",
@@ -22,5 +23,5 @@ var remotes = {
     }
 }
 
-timerRefreshView = 2000;
+timerRefreshView = 5000;
 timerProcessQueue = 5000;
