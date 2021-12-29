@@ -6,3 +6,5 @@
     The subdirectory can be changed from "/rclone" to another path by editing js/settings.js
 
 - UI Themed, and added some more informations (RunningTime, MediumSpeed, TranferRate, ...)
+    
+![rclone-rc-web-gui](/screenshot.png?raw=true)
