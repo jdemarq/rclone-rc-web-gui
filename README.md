@@ -1,10 +1,11 @@
 # RClone RC GUI 2 (GuiTwo pour les intimes)
 This is 'rclone rc gui' forked to support rclone '--rc-baseurl' (subdir as /rclone).
+
 It's forked from : https://github.com/retifrav/rclone-rc-web-gui
 
 ## Fork ChangeList
 - Added support for URL subdirectory (rclone rcd ... --rc-baseurl <subdirectory>) :
-The subdirectory can be changed by editing the 'rcloneDir' variable in js/settings.js.
+    The subdirectory can be changed by editing the 'rcloneDir' variable in js/settings.js.
 
 - UI Themed, and added some more informations from rclone api (RunningTime, MediumSpeed, ErrorCount, ...)
     
