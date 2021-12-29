@@ -6,7 +6,7 @@ This is 'rclone rc gui' forked to support rclone custom baseurl (ex: /rclone)
 - Added support for URL subdirectory (rclone rcd ... --rc-baseurl <subdirectory>) :
 The subdirectory can be changed to another path by editing js/settings.js (default is "/rclone")
    
-- UI Themed, and added some more informations (RunningTime, MediumSpeed, TranferRate, ErrorCount, ...)
+- UI Themed, and added some more informations (RunningTime, MediumSpeed, ErrorCount, ...)
     
 ![rclone-rc-web-gui](/screenshot.png?raw=true)
 
